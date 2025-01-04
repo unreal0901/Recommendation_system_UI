@@ -92,10 +92,10 @@ export function ProfileComponents() {
   const recommendedUsers = response?.data || [];
 
   useEffect(() => {
-    const interests = loggedInUser?.interests;
-    if (interests && interests.length > 0) {
-      setInterests((prev) => [...prev, ...interests]);
-      setInitialInterests(interests);
+    const userInterests = loggedInUser?.interests;
+    if (userInterests && userInterests.length > 0) {
+      setInterests((prev) => [...userInterests]);
+      setInitialInterests(userInterests);
     }
   }, [loggedInUser]);
 
@@ -312,7 +312,7 @@ export function ProfileComponents() {
                   <h2 className="text-lg font-semibold">
                     {request?.senderDetails?.username}
                   </h2>
-                  <div className="flex flex-col flex-wrap">
+                  <div className="flex flex-row-reverse flex-wrap gap-2">
                     <Button
                       className="mr-2"
                       onClick={() => acceptRequestHandler(request._id)}
