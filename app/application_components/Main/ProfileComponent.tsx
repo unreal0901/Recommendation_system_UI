@@ -52,7 +52,7 @@ const InterestsComponent = ({
         {tags.map((tag, index) => (
           <Badge
             className="bg-blue-300 text-gray-800 hover:bg-red-500 hover:text-white hover:cursor-pointer"
-            key={index}
+            key={`${tag}-${index}`}
             onClick={() => handleRemoveTag(tag)}
           >
             <span>{tag}</span>

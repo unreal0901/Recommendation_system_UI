@@ -50,7 +50,7 @@ export function PaginatedComponent<T>({
 
   useEffect(() => {
     setInvalidationKey([queryKey, currentPage, itemsPerPage]);
-  }, [currentPage]);
+  }, [currentPage, queryKey, itemsPerPage, setInvalidationKey]);
   return (
     <div className="space-y-4">
       {isLoading && <div className="text-center">Loading...</div>}
