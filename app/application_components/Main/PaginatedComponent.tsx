@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/app/client/lib/store/useAuthStore";
@@ -48,9 +48,15 @@ export function PaginatedComponent<T>({
     setCurrentPage(Math.max(1, Math.min(page, totalPages)));
   };
 
+  //Latest ref pattern instead of using using useCallback
+  const invalidationRef = useRef(setInvalidationKey);
+  useLayoutEffect(() => {
+    invalidationRef.current = setInvalidationKey;
+  }, [setInvalidationKey]);
+
   useEffect(() => {
-    setInvalidationKey([queryKey, currentPage, itemsPerPage]);
-  }, [currentPage, queryKey, itemsPerPage, setInvalidationKey]);
+    invalidationRef.current([queryKey, currentPage, itemsPerPage]);
+  }, [currentPage, queryKey, itemsPerPage]);
   return (
     <div className="space-y-4">
       {isLoading && <div className="text-center">Loading...</div>}
