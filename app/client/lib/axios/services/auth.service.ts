@@ -38,8 +38,20 @@ export const RegisterUser = async (registerPayload: {
 export const VerifyToken = async () => {
   try {
     const response = await axiosInstance.post(authEndpoints.verifyToken);
-    console.log(response)
+    console.log(response);
     return response;
+  } catch (err) {
+    console.log(err);
+    throw err;
+  }
+};
+
+export const UpdateProfile = async (interests: string[]) => {
+  try {
+    const response = await axiosInstance.patch(authEndpoints.updateProfile, {
+      interests,
+    });
+    return response.data;
   } catch (err) {
     console.log(err);
     throw err;
