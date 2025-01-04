@@ -18,7 +18,6 @@ import {
   getAllIncomingRequestsPaginated,
   getAllRecommendedFriendsPaginated,
   getAllSentRequestsPaginated,
-  SendFriendRequest,
 } from "@/app/client/lib/axios/services/friend.service";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -232,28 +231,42 @@ export function ProfileComponents() {
         <ScrollArea className="w-full whitespace-nowrap rounded-md border">
           {!isFetching && (
             <div className="flex w-max space-x-4 p-4">
-              {recommendedUsers.map((user: any) => (
-                <Card key={user._id} className="w-[250px]">
-                  <CardHeader className="flex flex-row items-center gap-4">
-                    <Avatar>
-                      <AvatarImage
-                        src={user.avatar}
-                        alt={`${user.username}'s avatar`}
-                      />
-                      <AvatarFallback>{user.username[0]}</AvatarFallback>
-                    </Avatar>
-                    <CardTitle>{user.username}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <Button
-                      onClick={() => addFriendHandler(user._id)}
-                      className="w-full"
-                    >
-                      Add Friend
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
+              {recommendedUsers.map((user: any) => {
+                console.log(recommendedUsers);
+                return (
+                  <Card key={user._id} className="w-[250px]">
+                    <CardHeader className="flex flex-row items-center gap-4">
+                      <Avatar>
+                        <AvatarImage
+                          src={user.avatar}
+                          alt={`${user.username}'s avatar`}
+                        />
+                        <AvatarFallback>
+                          {user?.username?.[0] ||
+                            user?.mutualFriendDetails?.username[0]}
+                        </AvatarFallback>
+                      </Avatar>
+                      <CardTitle>
+                        {user.username || user?.mutualFriendDetails?.username}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <Button
+                        onClick={() =>
+                          addFriendHandler(
+                            user?.mutualFriendDetails
+                              ? user?.mutualFriendDetails?._id
+                              : user._id
+                          )
+                        }
+                        className="w-full"
+                      >
+                        Add Friend
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           )}
 
@@ -299,12 +312,17 @@ export function ProfileComponents() {
                   <h2 className="text-lg font-semibold">
                     {request?.senderDetails?.username}
                   </h2>
-                  <Button onClick={() => acceptRequestHandler(request._id)}>
-                    Accept
-                  </Button>
-                  <Button onClick={() => rejectRequestHandler(request._id)}>
-                    Reject
-                  </Button>
+                  <div className="flex flex-col flex-wrap">
+                    <Button
+                      className="mr-2"
+                      onClick={() => acceptRequestHandler(request._id)}
+                    >
+                      Accept
+                    </Button>
+                    <Button onClick={() => rejectRequestHandler(request._id)}>
+                      Reject
+                    </Button>
+                  </div>
                 </div>
               )}
               keyExtractor={(request) => request._id}
@@ -323,7 +341,9 @@ export function ProfileComponents() {
               itemsPerPage={5}
               renderItem={(user: any) => (
                 <div>
-                  <h2 className="text-lg font-semibold w-full">{user?.friendDetails?.username}</h2>
+                  <h2 className="text-lg font-semibold w-full">
+                    {user?.friendDetails?.username}
+                  </h2>
                 </div>
               )}
               keyExtractor={(user) => user._id}
