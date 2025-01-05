@@ -8,6 +8,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import FullscreenLoader from "./FullScreenLoader";
 
 const LoginComponent = () => {
   const [email, setEmail] = useState("");
@@ -40,33 +41,36 @@ const LoginComponent = () => {
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      <div className="space-y-2">
-        <Label htmlFor="login-email">Email</Label>
-        <Input
-          id="login-email"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="login-password">Password</Label>
-        <Input
-          id="login-password"
-          type="password"
-          placeholder="Enter your password"
-          required
-          value={password}
-          onChange={(e) => setPassowrd(e.target.value)}
-        />
-      </div>
-      <Button type="submit" className="w-full">
-        Login
-      </Button>
-    </form>
+    <>
+      {loginUser.isPending && <FullscreenLoader />}
+      <form className="space-y-4" onSubmit={handleSubmit}>
+        <div className="space-y-2">
+          <Label htmlFor="login-email">Email</Label>
+          <Input
+            id="login-email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="login-password">Password</Label>
+          <Input
+            id="login-password"
+            type="password"
+            placeholder="Enter your password"
+            required
+            value={password}
+            onChange={(e) => setPassowrd(e.target.value)}
+          />
+        </div>
+        <Button type="submit" className="w-full">
+          Login
+        </Button>
+      </form>
+    </>
   );
 };
 

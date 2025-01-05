@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { useMutation } from "@tanstack/react-query";
 import { RegisterUser } from "@/app/client/lib/axios/services/auth.service";
 import toast from "react-hot-toast";
+import FullscreenLoader from "./FullScreenLoader";
 
 type RegisterComponentProps = {
   changeTab: (tab: string) => void;
@@ -76,82 +77,85 @@ const RegisterComponent = ({ changeTab }: RegisterComponentProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="register-username">Username</Label>
-        <Input
-          id="register-username"
-          placeholder="Choose a username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="register-email">Email</Label>
-        <Input
-          id="register-email"
-          type="email"
-          placeholder="Enter your email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="register-password">Password</Label>
-        <Input
-          id="register-password"
-          type="password"
-          placeholder="Choose a password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="register-confirm-password">Confirm Password</Label>
-        <Input
-         className={`${
-          password !== confirmPassword 
-            ? "border-red-500 ring-red-500 focus-visible:ring-red-500 focus-visible:border-red-500" 
-            : ""
-        }`}
-          id="register-confirm-password"
-          type="password"
-          placeholder="Confirm your password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          required
-        />
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="Interests">Interests</Label>
-        <div className="flex flex-wrap gap-2">
-          {tags.map((tag, index) => (
-            <Badge
-              className="bg-blue-300 text-gray-800 hover:bg-red-500 hover:text-white hover:cursor-pointer"
-              key={index}
-              onClick={() => handleRemoveTag(tag)}
-            >
-              <span>{tag}</span>
-            </Badge>
-          ))}
+    <>
+      {register.isPending && <FullscreenLoader />}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="register-username">Username</Label>
+          <Input
+            id="register-username"
+            placeholder="Choose a username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
         </div>
-        <Input
-          id="Interests"
-          value={currentTag}
-          onChange={handleInputChange}
-          onKeyDown={handleKeyDown}
-          placeholder="Add Interests (press Enter)"
-        />
-      </div>
+        <div className="space-y-2">
+          <Label htmlFor="register-email">Email</Label>
+          <Input
+            id="register-email"
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="register-password">Password</Label>
+          <Input
+            id="register-password"
+            type="password"
+            placeholder="Choose a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="register-confirm-password">Confirm Password</Label>
+          <Input
+            className={`${
+              password !== confirmPassword
+                ? "border-red-500 ring-red-500 focus-visible:ring-red-500 focus-visible:border-red-500"
+                : ""
+            }`}
+            id="register-confirm-password"
+            type="password"
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            required
+          />
+        </div>
 
-      <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Registering..." : "Register"}
-      </Button>
-    </form>
+        <div className="space-y-2">
+          <Label htmlFor="Interests">Interests</Label>
+          <div className="flex flex-wrap gap-2">
+            {tags.map((tag, index) => (
+              <Badge
+                className="bg-blue-300 text-gray-800 hover:bg-red-500 hover:text-white hover:cursor-pointer"
+                key={index}
+                onClick={() => handleRemoveTag(tag)}
+              >
+                <span>{tag}</span>
+              </Badge>
+            ))}
+          </div>
+          <Input
+            id="Interests"
+            value={currentTag}
+            onChange={handleInputChange}
+            onKeyDown={handleKeyDown}
+            placeholder="Add Interests (press Enter)"
+          />
+        </div>
+
+        <Button type="submit" className="w-full" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </Button>
+      </form>
+    </>
   );
 };
 
